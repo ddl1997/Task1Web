@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database_connect>
+	<driver>com.mysql.cj.jdbc.Driver</driver>
+	<url>jdbc:mysql://localhost:3306/test?useSSL=true&amp;serverTimezone=GMT%2B8</url>
+	<username>root</username>
+	<password>123456</password>
+</database_connect>
+
