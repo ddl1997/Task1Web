@@ -21,4 +21,13 @@
         <servlet-name>FromJsonToExcelServlet</servlet-name>
         <url-pattern>/servlet/FromJsonToExcelServlet</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>FromExcelToJsonServlet</servlet-name>
+        <servlet-class>servlet.FromExcelToJsonServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FromExcelToJsonServlet</servlet-name>
+        <url-pattern>/servlet/FromExcelToJsonServlet</url-pattern>
+    </servlet-mapping>
 </web-app>
