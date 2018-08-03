@@ -1,11 +1,7 @@
 package method;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
+import java.sql.*;
 import java.util.UUID;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -22,12 +18,12 @@ public class CreateExcel {
 	public static String create_excel(String sql, String relativePath)
 	{
 		WritableWorkbook workbook = null;
+        String dir = CreateExcel.class.getResource("/../../").getPath();
 		String fileName = UUID.randomUUID().toString() + ".xls";
-		String filePath = (relativePath == null || relativePath.equals("")) ? 
-				"output" + File.separator + fileName :
-				relativePath + File.separator + fileName;
-		System.out.println(System.getProperty("user.dir"));
-		File file = new File(filePath);
+		String filePath = (relativePath == null || relativePath.equals("")) ?
+                "output" + File.separator + fileName :
+                relativePath + File.separator + fileName;
+		File file = new File(dir + filePath);
 		try {
 			file.createNewFile();
 			workbook = Workbook.createWorkbook(file);
@@ -37,13 +33,11 @@ public class CreateExcel {
 		
 		Connection conn = getConn();
 		try {
-			PreparedStatement ps = (PreparedStatement)conn.prepareStatement(sql);
-			ResultSet rs = (ResultSet) ps.executeQuery();
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
-			
-			WritableSheet s = null;
 			int sheetCount = workbook.getNumberOfSheets();
-			s = workbook.createSheet("Sheet" + (sheetCount + 1), sheetCount);
+            WritableSheet s = workbook.createSheet("Sheet" + (sheetCount + 1), sheetCount);
 			for (int i = 0; i < rsmd.getColumnCount(); i++)
 			{
 				Label label = new Label(i, 0, rsmd.getColumnName(i + 1));
@@ -57,9 +51,9 @@ public class CreateExcel {
 				}
 				rowCount++;
 			}
-			
+
 			workbook.write();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -69,17 +63,23 @@ public class CreateExcel {
 				e.printStackTrace();
 			}
         }
-		
-		return filePath;
-		
+
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return filePath;
+
 	}
-	
-	private static Connection getConn() {   
-		
+
+	private static Connection getConn() {
+
 	    try {
-	    	File f = new File("src" + File.separator + "config" + File.separator + "database_config.xml");   
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();   
-			DocumentBuilder builder = factory.newDocumentBuilder();   
+	    	File f = new File(/*"src" + File.separator + "config" + File.separator + "database_config.xml"*/CreateExcel.class.getResource("/config" + File.separator + "database_config.xml").getPath());
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document doc = builder.parse(f);
 			NodeList nl = doc.getElementsByTagName("database_connect");
 			NodeList attrs = nl.item(0).getChildNodes();
@@ -97,7 +97,7 @@ public class CreateExcel {
 		    String username = values[2];
 		    String password = values[3];
 	        Class.forName(driver);
-	        return (Connection) DriverManager.getConnection(url, username, password);
+	        return DriverManager.getConnection(url, username, password);
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
@@ -106,7 +106,8 @@ public class CreateExcel {
 	
 	public static void main(String[] args)
 	{
-		System.out.println(CreateExcel.create_excel("SELECT * FROM table_1;", "output"));
+//
+//		System.out.println(CreateExcel.class.getResource("/config" + File.separator + "database_config.xml").getPath());
 	}
 
 }

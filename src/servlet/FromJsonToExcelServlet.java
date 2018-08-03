@@ -7,6 +7,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import method.JsonToExcel;
 import net.sf.json.JSONObject;
 
@@ -34,11 +36,9 @@ public class FromJsonToExcelServlet extends HttpServlet {
 		String path = request.getParameter("path");
 		JSONObject jo = JSONObject.fromObject(json);
 		String filePath = JsonToExcel.json_to_excel(jo, path);
-		response.setContentType("text/html;charset=utf-8");
-		PrintWriter out=response.getWriter();
-		out.println(filePath);
-		out.flush();
-		out.close();
+		HttpSession session=request.getSession();
+		session.setAttribute("message",filePath);
+		response.sendRedirect("display.jsp");
 	}
 
 	/**

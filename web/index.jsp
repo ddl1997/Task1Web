@@ -19,7 +19,6 @@
         <input type = "text" name = "path1"><br>
         <button type="button" onclick="submitSqlForm()">提交</button>
     </form>
-    <div id = "addr1"></div>
     <h4>通过json生成excel电子表格</h4>
     <form id = "jsonForm" action = "FromJsonToExcelServlet">
         请输入json: <br>
@@ -28,7 +27,6 @@
         <input type = "text" name = "path2"><br>
         <button type="button" onclick="submitJsonForm()">提交</button>
     </form>
-    <div id = "addr2"></div>
   </body>
   <script  type="text/javaScript">
       function submitSqlForm() {
@@ -37,11 +35,6 @@
           sqlStr.value = window.btoa(sqlStr.value);
           myForm.style.display = "none";
           myForm.submit();
-          alert("aaa");
-          //document.body.removeChild(myForm);
-          var url = window.location.host + '${filePath}';
-          var addr = document.getElementsByName("addr1");
-          addr.innerHTML = url;
       }
 
       function submitJsonForm() {
@@ -49,9 +42,6 @@
           myForm.style.display = "none";
           myForm.submit();
           //document.body.removeChild(myForm);
-          var url = window.location.host + '${filePath}';
-          var addr = document.getElementsByName("addr2");
-          addr.innerHTML = url;
       }
   </script>
 </html>

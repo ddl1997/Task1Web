@@ -6,6 +6,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import method.*;
 import java.util.Base64;
 
@@ -32,10 +34,10 @@ public class FromDatabaseToExcelServlet extends HttpServlet {
 		String rawSql = request.getParameter("sql");
 		String path = request.getParameter("path");
 		String sql = new String(Base64.getDecoder().decode(rawSql));
-		System.out.println(sql);
 		String filePath = CreateExcel.create_excel(sql, path);
-        request.setAttribute("message", filePath);
-		response.setContentType("text/html;charset=utf-8");
+        HttpSession session=request.getSession();
+        session.setAttribute("message",filePath);
+        response.sendRedirect("display.jsp");
 	}
 
 	/**

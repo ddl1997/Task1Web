@@ -23,11 +23,12 @@ public class JsonToExcel {
 	public static String json_to_excel(JSONObject input, String relativePath)
 	{
 		WritableWorkbook workbook = null;
+		String dir = CreateExcel.class.getResource("/../../").getPath();
 		String fileName = UUID.randomUUID().toString() + ".xls";
 		String filePath = (relativePath == null || relativePath.equals("")) ?
-				"web" + File.separator + "output" + File.separator + fileName :
-				"web" + File.separator + relativePath + File.separator + fileName;
-		File file = new File(filePath);
+				"output" + File.separator + fileName :
+				relativePath + File.separator + fileName;
+		File file = new File(dir + filePath);
 		try {
 			file.createNewFile();
 			workbook = Workbook.createWorkbook(file);
@@ -70,7 +71,6 @@ public class JsonToExcel {
 				e.printStackTrace();
 			}
 		}
-		System.out.println(file.getAbsolutePath());
 		return filePath;
 	}
 	
